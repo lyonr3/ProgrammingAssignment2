@@ -1,15 +1,33 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Functions take a matrix as input and generate its inverse
+##    the inverse is cached and pulled from cache on subsequent runs
 
-## Write a short comment describing this function
+## This sets up the instance
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setimatrix <- function(solve) m <<- solve
+  getimatrix <- function() m
+  list(set = set, get = get,
+       setimatrix = setimatrix,
+       getimatrix = getimatrix)
 }
 
 
-## Write a short comment describing this function
+## This function generates or restores the cached inverse
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cachesolve <- function(x, ...) {
+   m <- x$getimatrix()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  m <- solve(data, ...)
+  x$setimatrix(m)
+  m
 }
